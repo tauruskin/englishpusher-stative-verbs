@@ -68,5 +68,11 @@ const wordList: WordEntry[] = [
   { word: "include", translation: "включати в себе", example: "The price ___ breakfast and all taxes." },
   { word: "possess", translation: "володіти", example: "She ___ a rare talent for learning languages quickly." },
 ];
-
+export const enabledQuestionTypes = [
+  'multipleChoice',
+  'reversed', 
+  'fillBlank',
+  'trueOrFalse',
+  'matching'
+];
 export default wordList;
