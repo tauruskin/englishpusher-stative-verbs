@@ -45,8 +45,12 @@ const QuestionCard = ({ question, answered, selectedAnswer, isCorrect, streak, t
     }
   };
 
+  const characterPose: CharacterPose = !answered ? "thinking" : isCorrect ? "happy" : "sad";
+
   return (
-    <div className={`w-full max-w-lg mx-auto space-y-6 bg-card rounded-2xl p-8 border border-border shadow-md relative overflow-hidden transition-all duration-300 ${transitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0 animate-slide-up'}`}>
+    <div className="flex items-center gap-6 w-full">
+      <GameCharacter pose={characterPose} className="flex-shrink-0" />
+      <div className={`flex-1 w-full max-w-lg mx-auto space-y-6 bg-card rounded-2xl p-8 border border-border shadow-md relative overflow-hidden transition-all duration-300 ${transitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0 animate-slide-up'}`}>
       {/* Reaction emoji overlay */}
       {answered && isCorrect !== null && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
