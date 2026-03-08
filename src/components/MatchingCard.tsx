@@ -12,6 +12,7 @@ import {
 } from "@dnd-kit/core";
 import { Question } from "@/hooks/useGame";
 import GameCharacter, { CharacterPose } from "@/components/GameCharacter";
+import SpeakerButton from "@/components/SpeakerButton";
 
 /* ── helpers ────────────────────────────────────── */
 function shuffle<T>(arr: T[]): T[] {
@@ -75,9 +76,11 @@ interface MatchingCardProps {
   question: Question;
   transitioning: boolean;
   onSubmit: (answer: string) => void;
+  speak: (word: string) => void;
+  speakIfInteracted: (word: string) => void;
 }
 
-const MatchingCard = ({ question, transitioning, onSubmit }: MatchingCardProps) => {
+const MatchingCard = ({ question, transitioning, onSubmit, speak }: MatchingCardProps) => {
   const words = question.words!;
 
   const [shuffledTranslations] = useState(() =>
@@ -224,9 +227,10 @@ const MatchingCard = ({ question, transitioning, onSubmit }: MatchingCardProps) 
                 >
                   <div
                     onClick={() => handleWordClick(w.word)}
-                    className={`px-3 py-2.5 rounded-lg border-2 font-body text-sm md:text-base text-center transition-all duration-200 select-none ${getWordStyle(w.word)}`}
+                    className={`px-3 py-2.5 rounded-lg border-2 font-body text-sm md:text-base text-center transition-all duration-200 select-none flex items-center justify-center gap-1 ${getWordStyle(w.word)}`}
                   >
                     {w.word}
+                    {!correctPairs.has(w.word) && <SpeakerButton word={w.word} onSpeak={speak} className="w-6 h-6 text-xs" />}
                   </div>
                 </DraggableWord>
               ))}
