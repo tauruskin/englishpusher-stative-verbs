@@ -95,7 +95,7 @@ const Index = () => {
                 rel="noopener noreferrer"
                 className="text-xs text-muted-foreground hover:text-primary transition-colors"
               >
-                🌐 EnglishPusher.in.ua
+                🌐 Englishpusher.in.ua
               </a>
             </div>
           </div>
