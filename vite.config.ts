@@ -4,7 +4,8 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
-base: mode === "production" ? "/englishpusher-trivia-adjectives-for-feelings/" : "/",
+export default defineConfig(({ mode }) => ({
+  base: mode === "production" ? "/englishpusher-trivia-adjectives-for-feelings/" : "/",
   server: {
     host: "::",
     port: 8080,
