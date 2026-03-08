@@ -28,7 +28,7 @@ const TrueFalseCard = ({
 }: TrueFalseCardProps) => {
   const characterPose: CharacterPose = !answered ? "thinking" : isCorrect ? "happy" : "sad";
 
-  // Auto-pronounce on new question
+  // Auto-pronounce: English word is shown as the question
   useEffect(() => {
     const timer = setTimeout(() => speakIfInteracted(question.word.word), 500);
     return () => clearTimeout(timer);
