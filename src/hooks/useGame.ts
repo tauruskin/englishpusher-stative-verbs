@@ -6,10 +6,16 @@ export type QuestionType = "en-to-native" | "native-to-en" | "fill-blank" | "tru
 export interface Question {
   type: QuestionType;
   word: WordEntry;
-  words?: WordEntry[];          // for matching (5 words)
+  words?: WordEntry[];
   options?: string[];
   correctAnswer: string;
-  shownTranslation?: string;    // for true-false
+  shownTranslation?: string;
+}
+
+export interface AnswerResult {
+  word: WordEntry;
+  questionType: QuestionType;
+  correct: boolean;
 }
 
 const configToType: Record<string, QuestionType> = {
@@ -18,6 +24,14 @@ const configToType: Record<string, QuestionType> = {
   fillBlank: "fill-blank",
   trueOrFalse: "true-false",
   matching: "matching",
+};
+
+export const questionTypeLabel: Record<QuestionType, string> = {
+  "en-to-native": "Multiple choice",
+  "native-to-en": "Reverse multiple choice",
+  "fill-blank": "Fill in the blank",
+  "true-false": "True or False",
+  "matching": "Match the pair",
 };
 
 function shuffle<T>(arr: T[]): T[] {
@@ -29,7 +43,7 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
-function buildSingleQuestion(word: WordEntry, type: QuestionType): Question {
+function buildSingleQuestion(word: WordEntry, type: QuestionType, pool: WordEntry[]): Question {
   if (type === "fill-blank") {
     return { type, word, correctAnswer: word.word };
   }
@@ -38,34 +52,32 @@ function buildSingleQuestion(word: WordEntry, type: QuestionType): Question {
     const isTrue = Math.random() < 0.5;
     const shownTranslation = isTrue
       ? word.translation
-      : shuffle(wordList.filter((w) => w.word !== word.word))[0].translation;
+      : shuffle(pool.filter((w) => w.word !== word.word))[0].translation;
     return { type, word, correctAnswer: isTrue ? "true" : "false", shownTranslation };
   }
 
-  const others = wordList.filter((w) => w.word !== word.word);
+  const others = pool.filter((w) => w.word !== word.word);
   const wrongOnes = shuffle(others).slice(0, 3);
 
   if (type === "en-to-native") {
     const options = shuffle([word.translation, ...wrongOnes.map((w) => w.translation)]);
     return { type, word, options, correctAnswer: word.translation };
   } else {
-    // native-to-en
     const options = shuffle([word.word, ...wrongOnes.map((w) => w.word)]);
     return { type, word, options, correctAnswer: word.word };
   }
 }
 
-function generateQuestions(count: number): Question[] {
+function generateQuestions(pool: WordEntry[]): Question[] {
   const enabledTypes = enabledQuestionTypes.map((t) => configToType[t]).filter(Boolean);
   const singleTypes = enabledTypes.filter((t) => t !== "matching");
   const matchingEnabled = enabledTypes.includes("matching");
 
-  const shuffled = shuffle(wordList).slice(0, Math.min(count, wordList.length));
+  const shuffled = shuffle(pool);
   const questions: Question[] = [];
   let i = 0;
 
   while (i < shuffled.length) {
-    // ~20% chance of matching if enabled and ≥5 words remain
     if (matchingEnabled && shuffled.length - i >= 5 && Math.random() < 0.2) {
       const matchWords = shuffled.slice(i, i + 5);
       questions.push({
@@ -81,7 +93,7 @@ function generateQuestions(count: number): Question[] {
         singleTypes.length > 0
           ? singleTypes[Math.floor(Math.random() * singleTypes.length)]
           : "en-to-native";
-      questions.push(buildSingleQuestion(word, type));
+      questions.push(buildSingleQuestion(word, type, pool.length >= 4 ? pool : wordList));
       i++;
     }
   }
@@ -89,8 +101,9 @@ function generateQuestions(count: number): Question[] {
   return questions;
 }
 
-export function useGame(questionCount = wordList.length) {
-  const [questions, setQuestions] = useState<Question[]>(() => generateQuestions(questionCount));
+export function useGame(customPool?: WordEntry[]) {
+  const pool = customPool ?? wordList;
+  const [questions, setQuestions] = useState<Question[]>(() => generateQuestions(pool));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [answered, setAnswered] = useState(false);
@@ -99,6 +112,7 @@ export function useGame(questionCount = wordList.length) {
   const [gameOver, setGameOver] = useState(false);
   const [streak, setStreak] = useState(0);
   const [transitioning, setTransitioning] = useState(false);
+  const [results, setResults] = useState<AnswerResult[]>([]);
 
   const currentQuestion = questions[currentIndex] ?? null;
 
@@ -116,7 +130,24 @@ export function useGame(questionCount = wordList.length) {
         setStreak(0);
       }
 
-      // Matching handles its own celebration internally — short delay
+      // Record results for each word in the question
+      if (currentQuestion.type === "matching" && currentQuestion.words) {
+        // For matching, all words count as correct (since submitAnswer is only called on success)
+        setResults((prev) => [
+          ...prev,
+          ...currentQuestion.words!.map((w) => ({
+            word: w,
+            questionType: currentQuestion.type,
+            correct,
+          })),
+        ]);
+      } else {
+        setResults((prev) => [
+          ...prev,
+          { word: currentQuestion.word, questionType: currentQuestion.type, correct },
+        ]);
+      }
+
       const isMatching = currentQuestion.type === "matching";
       const isFillBlank = currentQuestion.type === "fill-blank";
       const feedbackDelay = isMatching
@@ -143,8 +174,9 @@ export function useGame(questionCount = wordList.length) {
     [answered, currentQuestion, currentIndex, questions.length]
   );
 
-  const restart = useCallback(() => {
-    setQuestions(generateQuestions(questionCount));
+  const restart = useCallback((newPool?: WordEntry[]) => {
+    const p = newPool ?? pool;
+    setQuestions(generateQuestions(p));
     setCurrentIndex(0);
     setScore(0);
     setAnswered(false);
@@ -153,7 +185,8 @@ export function useGame(questionCount = wordList.length) {
     setGameOver(false);
     setStreak(0);
     setTransitioning(false);
-  }, [questionCount]);
+    setResults([]);
+  }, [pool]);
 
   return {
     currentQuestion,
@@ -166,6 +199,7 @@ export function useGame(questionCount = wordList.length) {
     gameOver,
     streak,
     transitioning,
+    results,
     submitAnswer,
     restart,
   };

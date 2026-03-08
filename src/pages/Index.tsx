@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useGame } from "@/hooks/useGame";
+import { WordEntry } from "@/data/wordList";
 import ProgressBar from "@/components/ProgressBar";
 import ScoreBadge from "@/components/ScoreBadge";
 import QuestionCard from "@/components/QuestionCard";
@@ -7,7 +9,18 @@ import MatchingCard from "@/components/MatchingCard";
 import EndScreen from "@/components/EndScreen";
 
 const Index = () => {
-  const game = useGame();
+  const [customPool, setCustomPool] = useState<WordEntry[] | undefined>();
+  const game = useGame(customPool);
+
+  const handlePracticeWeak = (words: WordEntry[]) => {
+    setCustomPool(words);
+    game.restart(words);
+  };
+
+  const handlePlayAgain = () => {
+    setCustomPool(undefined);
+    game.restart();
+  };
 
   const renderQuestion = () => {
     if (!game.currentQuestion) return null;
@@ -54,7 +67,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
       <header className="border-b border-border px-6 py-4 bg-card shadow-sm">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -83,11 +95,16 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Main */}
       <main className="flex-1 flex items-center justify-center px-6 py-10">
         <div className="w-full max-w-2xl space-y-8">
           {game.gameOver ? (
-            <EndScreen score={game.score} total={game.totalQuestions} onRestart={game.restart} />
+            <EndScreen
+              score={game.score}
+              total={game.totalQuestions}
+              results={game.results}
+              onRestart={handlePlayAgain}
+              onPracticeWeak={handlePracticeWeak}
+            />
           ) : (
             <>
               <ProgressBar current={game.currentIndex} total={game.totalQuestions} />
