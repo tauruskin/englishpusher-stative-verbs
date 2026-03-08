@@ -48,23 +48,28 @@ const EndScreen = ({ score, total, onRestart }: EndScreenProps) => {
     }
   }, [isGreat, isPerfect]);
 
+  const characterPose: CharacterPose = isPerfect ? "celebrate" : isGreat ? "happy" : "sad";
+
   return (
-    <div className="w-full max-w-md mx-auto text-center space-y-8 animate-slide-up">
-      <div className={`text-7xl ${isPerfect ? 'animate-bounce' : 'animate-emoji-correct'}`}>{emoji}</div>
-      <h2 className="font-display text-3xl font-bold text-foreground">{message}</h2>
-      <div className="bg-card rounded-2xl p-8 border border-border shadow-md space-y-4">
-        <div className="text-5xl font-display font-bold text-primary">{pct}%</div>
-        <p className="text-muted-foreground">
-          You got <span className="text-foreground font-semibold">{score}</span> out of{" "}
-          <span className="text-foreground font-semibold">{total}</span> correct
-        </p>
+    <div className="flex items-center gap-8 justify-center">
+      <GameCharacter pose={characterPose} className="flex-shrink-0" />
+      <div className="w-full max-w-md text-center space-y-8 animate-slide-up">
+        <div className={`text-7xl ${isPerfect ? 'animate-bounce' : 'animate-emoji-correct'}`}>{emoji}</div>
+        <h2 className="font-display text-3xl font-bold text-foreground">{message}</h2>
+        <div className="bg-card rounded-2xl p-8 border border-border shadow-md space-y-4">
+          <div className="text-5xl font-display font-bold text-primary">{pct}%</div>
+          <p className="text-muted-foreground">
+            You got <span className="text-foreground font-semibold">{score}</span> out of{" "}
+            <span className="text-foreground font-semibold">{total}</span> correct
+          </p>
+        </div>
+        <button
+          onClick={onRestart}
+          className="px-8 py-3.5 rounded-lg bg-primary text-primary-foreground font-display font-semibold text-lg hover:opacity-90 hover:scale-105 active:scale-95 transition-all"
+        >
+          Play Again 🔄
+        </button>
       </div>
-      <button
-        onClick={onRestart}
-        className="px-8 py-3.5 rounded-lg bg-primary text-primary-foreground font-display font-semibold text-lg hover:opacity-90 hover:scale-105 active:scale-95 transition-all"
-      >
-        Play Again 🔄
-      </button>
     </div>
   );
 };
