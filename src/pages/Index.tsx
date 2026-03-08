@@ -90,7 +90,7 @@ const Index = () => {
                 Englishpusher<span className="text-primary"> Trivia</span>
               </h1>
               <p className="text-xs text-muted-foreground">
-                Adjectives for Feelings
+                Stative Verbs
               </p>
             </div>
           </div>
