@@ -1,5 +1,39 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import wordList, { WordEntry, enabledQuestionTypes } from "@/data/wordList";
+
+const STORAGE_KEY = "englishpusher-game-progress";
+
+interface SavedProgress {
+  questions: Question[];
+  currentIndex: number;
+  score: number;
+  streak: number;
+  results: AnswerResult[];
+}
+
+function saveProgress(data: SavedProgress) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch {}
+}
+
+function loadProgress(): SavedProgress | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw) as SavedProgress;
+    if (data.questions?.length && data.currentIndex < data.questions.length) return data;
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+function clearProgress() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {}
+}
 
 export type QuestionType = "en-to-native" | "native-to-en" | "fill-blank" | "true-false" | "matching";
 
