@@ -19,11 +19,13 @@ const QuestionCard = ({ question, answered, selectedAnswer, isCorrect, streak, t
   const [inputValue, setInputValue] = useState("");
   const [showCorrectedAnswer, setShowCorrectedAnswer] = useState(false);
 
-  // Auto-pronounce on new question
+  // Auto-pronounce only when English word is the displayed question
   useEffect(() => {
-    const timer = setTimeout(() => speakIfInteracted(question.word.word), 500);
-    return () => clearTimeout(timer);
-  }, [question.word.word, speakIfInteracted]);
+    if (question.type === "en-to-native") {
+      const timer = setTimeout(() => speakIfInteracted(question.word.word), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [question.word.word, question.type, speakIfInteracted]);
 
   // For fill-blank wrong answers: after 1s, swap to correct answer
   useEffect(() => {
