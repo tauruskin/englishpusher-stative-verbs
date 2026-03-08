@@ -1,7 +1,9 @@
 /**
- * Word list config for EnglishPusher Trivia.
- * Each entry: { word: English word, translation: native language translation, example: sentence with ___ blank }
- * Edit/replace this array to swap lesson content.
+ * EnglishPusher Trivia — Word List Config
+ * Topic: Adjectives for Feelings (-ed / -ing adjectives)
+ * 
+ * Edit this file to swap vocabulary for different lessons.
+ * Each entry needs: word (English), translation (Ukrainian), example (sentence with ___ blank).
  */
 export interface WordEntry {
   word: string;
@@ -10,26 +12,33 @@ export interface WordEntry {
 }
 
 const wordList: WordEntry[] = [
-  { word: "anxious", translation: "тревожный", example: "She felt ___ before the job interview." },
-  { word: "delighted", translation: "восхищённый", example: "He was ___ to hear the good news." },
-  { word: "frustrated", translation: "разочарованный", example: "I'm ___ because nothing is working." },
-  { word: "grateful", translation: "благодарный", example: "We are ___ for your support." },
-  { word: "overwhelmed", translation: "подавленный", example: "She felt ___ by all the tasks at work." },
-  { word: "relieved", translation: "испытывающий облегчение", example: "He was ___ when the test was cancelled." },
-  { word: "resentful", translation: "обиженный", example: "She became ___ after being passed over for the promotion." },
-  { word: "thrilled", translation: "в восторге", example: "They were ___ about the upcoming vacation." },
-  { word: "indifferent", translation: "безразличный", example: "He seemed ___ to the outcome of the game." },
-  { word: "bewildered", translation: "озадаченный", example: "She looked ___ by the complicated instructions." },
-  { word: "content", translation: "довольный", example: "After a long day, he felt ___ sitting by the fire." },
-  { word: "envious", translation: "завистливый", example: "She was ___ of her colleague's success." },
-  { word: "furious", translation: "взбешённый", example: "He was ___ when he found out the truth." },
-  { word: "nostalgic", translation: "ностальгирующий", example: "The old song made her feel ___." },
-  { word: "ashamed", translation: "пристыженный", example: "He felt ___ of his rude behavior." },
-  { word: "ecstatic", translation: "в экстазе", example: "She was ___ after winning the competition." },
-  { word: "miserable", translation: "несчастный", example: "The rainy weather made everyone feel ___." },
-  { word: "suspicious", translation: "подозрительный", example: "He became ___ when she avoided his questions." },
-  { word: "enthusiastic", translation: "полный энтузиазма", example: "The students were ___ about the field trip." },
-  { word: "terrified", translation: "в ужасе", example: "She was ___ of speaking in public." },
+  { word: "bored", translation: "нудьгуючий", example: "I'm so ___ — there's nothing to do today." },
+  { word: "boring", translation: "нудний", example: "The lecture was incredibly ___ and I almost fell asleep." },
+  { word: "excited", translation: "захоплений", example: "She was really ___ about her trip to Paris." },
+  { word: "exciting", translation: "захоплюючий", example: "The football match was so ___ that everyone was on their feet." },
+  { word: "embarrassing", translation: "бентежний, соромно, незручний", example: "It was an ___ moment when I forgot her name." },
+  { word: "embarrassed", translation: "збентежений, зніяковілий", example: "He felt ___ after tripping in front of everyone." },
+  { word: "annoyed", translation: "роздратований", example: "She was ___ because her neighbour kept playing loud music." },
+  { word: "annoying", translation: "дратуючий", example: "That ___ noise from the construction site won't stop." },
+  { word: "frightened", translation: "наляканий", example: "The child was ___ by the loud thunder." },
+  { word: "frightening", translation: "лякаючий", example: "Walking through the dark forest was a ___ experience." },
+  { word: "surprised", translation: "здивований", example: "I was ___ to see my old friend at the party." },
+  { word: "surprising", translation: "дивуючий", example: "The test results were ___ — nobody expected them." },
+  { word: "amazing", translation: "дивовижний", example: "The view from the mountain top was absolutely ___." },
+  { word: "amazed", translation: "вражений", example: "We were ___ by how quickly she learned to play the piano." },
+  { word: "disappointed", translation: "розчарований", example: "He was ___ when the concert was cancelled." },
+  { word: "disappointing", translation: "розчаровуючий", example: "The movie had a very ___ ending." },
+  { word: "terrified", translation: "нажаханий", example: "She was absolutely ___ of flying." },
+  { word: "terrifying", translation: "жахливий", example: "The horror film was the most ___ thing I've ever watched." },
+  { word: "exhausted", translation: "виснажений", example: "After running a marathon, she felt completely ___." },
+  { word: "exhausting", translation: "виснажливий", example: "Moving to a new apartment is always ___." },
+  { word: "silly", translation: "дурний", example: "Stop being ___ and focus on your work." },
+  { word: "calm", translation: "спокійний", example: "He stayed ___ even during the emergency." },
+  { word: "jealous", translation: "ревнивий, заздрісний", example: "She felt ___ when her friend got a promotion." },
+  { word: "in love", translation: "закоханий", example: "He's been ___ with her since they first met." },
+  { word: "nervous", translation: "знервований", example: "I always get ___ before a job interview." },
+  { word: "sleepy", translation: "сонний", example: "I'm feeling ___ — I think I'll go to bed early." },
+  { word: "worried", translation: "схвильований", example: "She was ___ about her son's exam results." },
 ];
 
 export default wordList;
