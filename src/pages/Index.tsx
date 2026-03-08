@@ -104,6 +104,16 @@ const Index = () => {
               {tts.muted ? "🔇" : "🔊"}
             </button>
             {!game.gameOver && (
+              <button
+                onClick={handlePlayAgain}
+                className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-muted transition-colors text-lg"
+                aria-label="Restart game"
+                title="Restart"
+              >
+                🔄
+              </button>
+            )}
+            {!game.gameOver && (
               <>
                 {game.streak >= 3 && (
                   <span className="text-sm font-display font-bold text-primary animate-pulse">
